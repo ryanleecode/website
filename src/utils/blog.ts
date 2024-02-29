@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import type { Post } from '~/types';
 import { APP_BLOG } from '~/utils/config';
-import { cleanSlug, trimSlash, BLOG_BASE, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
+import { BLOG_BASE, CATEGORY_BASE, cleanSlug, POST_PERMALINK_PATTERN, TAG_BASE, trimSlash } from './permalinks';
 
 const generatePermalink = async ({
   id,
@@ -102,7 +102,7 @@ const getRandomizedPosts = (array: Post[], num: number) => {
   return newArray;
 };
 
-const load = async function (): Promise<Array<Post>> {
+const load = async function(): Promise<Array<Post>> {
   const posts = await getCollection('post');
   const normalizedPosts = posts.map(async (post) => await getNormalizedPost(post));
 
@@ -145,8 +145,8 @@ export const findPostsBySlugs = async (slugs: Array<string>): Promise<Array<Post
 
   const posts = await fetchPosts();
 
-  return slugs.reduce(function (r: Array<Post>, slug: string) {
-    posts.some(function (post: Post) {
+  return slugs.reduce(function(r: Array<Post>, slug: string) {
+    posts.some(function(post: Post) {
       return slug === post.slug && r.push(post);
     });
     return r;
@@ -159,8 +159,8 @@ export const findPostsByIds = async (ids: Array<string>): Promise<Array<Post>> =
 
   const posts = await fetchPosts();
 
-  return ids.reduce(function (r: Array<Post>, id: string) {
-    posts.some(function (post: Post) {
+  return ids.reduce(function(r: Array<Post>, id: string) {
+    posts.some(function(post: Post) {
       return id === post.id && r.push(post);
     });
     return r;
@@ -212,7 +212,7 @@ export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: Pagin
         params: { category: category, blog: CATEGORY_BASE || undefined },
         pageSize: blogPostsPerPage,
         props: { category },
-      }
+      },
     )
   );
 };
@@ -234,7 +234,7 @@ export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFu
         params: { tag: tag, blog: TAG_BASE || undefined },
         pageSize: blogPostsPerPage,
         props: { tag },
-      }
+      },
     )
   );
 };
@@ -245,13 +245,13 @@ export function getRelatedPosts(allPosts: Post[], currentSlug: string, currentTa
 
   const relatedPosts = getRandomizedPosts(
     allPosts.filter((post) => post.slug !== currentSlug && post.tags?.some((tag) => currentTags.includes(tag))),
-    APP_BLOG.relatedPostsCount
+    APP_BLOG.relatedPostsCount,
   );
 
   if (relatedPosts.length < APP_BLOG.relatedPostsCount) {
     const morePosts = getRandomizedPosts(
       allPosts.filter((post) => post.slug !== currentSlug && !post.tags?.some((tag) => currentTags.includes(tag))),
-      APP_BLOG.relatedPostsCount - relatedPosts.length
+      APP_BLOG.relatedPostsCount - relatedPosts.length,
     );
     relatedPosts.push(...morePosts);
   }

@@ -1,5 +1,5 @@
 import { getImage } from 'astro:assets';
-import { transformUrl, parseUrl } from 'unpic';
+import { parseUrl, transformUrl } from 'unpic';
 
 import type { ImageMetadata } from 'astro';
 import type { HTMLAttributes } from 'astro/types';
@@ -29,7 +29,7 @@ export type ImagesOptimizer = (
   image: ImageMetadata | string,
   breakpoints: number[],
   width?: number,
-  height?: number
+  height?: number,
 ) => Promise<Array<{ src: string; width: number }>>;
 
 /* ******* */
@@ -222,7 +222,7 @@ export const astroAsseetsOptimizer: ImagesOptimizer = async (image, breakpoints)
         src: url,
         width: w,
       };
-    })
+    }),
   );
 };
 
@@ -239,18 +239,17 @@ export const unpicOptimizer: ImagesOptimizer = async (image, breakpoints, width,
 
   return Promise.all(
     breakpoints.map(async (w: number) => {
-      const url =
-        transformUrl({
-          url: image,
-          width: w,
-          height: width && height ? computeHeight(w, width / height) : height,
-          cdn: urlParsed.cdn,
-        }) || image;
+      const url = transformUrl({
+        url: image,
+        width: w,
+        height: width && height ? computeHeight(w, width / height) : height,
+        cdn: urlParsed.cdn,
+      }) || image;
       return {
         src: String(url),
         width: w,
       };
-    })
+    }),
   );
 };
 
@@ -258,7 +257,7 @@ export const unpicOptimizer: ImagesOptimizer = async (image, breakpoints, width,
 export async function getImagesOptimized(
   image: ImageMetadata | string,
   { src: _, width, height, sizes, aspectRatio, widths, layout = 'constrained', style = '', ...rest }: ImageProps,
-  transform: ImagesOptimizer = () => Promise.resolve([])
+  transform: ImagesOptimizer = () => Promise.resolve([]),
 ): Promise<{ src: string; attributes: AttributesProps }> {
   if (typeof image !== 'string') {
     width ||= Number(image.width) || undefined;
@@ -309,12 +308,14 @@ export async function getImagesOptimized(
       height: height,
       srcset: srcset || undefined,
       sizes: sizes,
-      style: `${getStyle({
-        width: width,
-        height: height,
-        aspectRatio: aspectRatio,
-        layout: layout,
-      })}${style ?? ''}`,
+      style: `${
+        getStyle({
+          width: width,
+          height: height,
+          aspectRatio: aspectRatio,
+          layout: layout,
+        })
+      }${style ?? ''}`,
       ...rest,
     },
   };

@@ -1,8 +1,7 @@
 import { I18N } from '~/utils/config';
 
-const formatter: Intl.DateTimeFormat =
-  I18N?.dateFormatter ||
-  new Intl.DateTimeFormat('en', {
+const formatter: Intl.DateTimeFormat = I18N?.dateFormatter
+  || new Intl.DateTimeFormat('en', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',

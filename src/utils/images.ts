@@ -1,8 +1,8 @@
-import { getImage } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
 import type { OpenGraph } from '@astrolib/seo';
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
 
-const load = async function () {
+const load = async function() {
   let images: Record<string, () => Promise<unknown>> | undefined = undefined;
   try {
     images = import.meta.glob('~/assets/images/**/*.{jpeg,jpg,png,tiff,webp,gif,svg,JPEG,JPG,PNG,TIFF,WEBP,GIF,SVG}');
@@ -22,7 +22,7 @@ export const fetchLocalImages = async () => {
 
 /** */
 export const findImage = async (
-  imagePath?: string | ImageMetadata | null
+  imagePath?: string | ImageMetadata | null,
 ): Promise<string | ImageMetadata | undefined | null> => {
   // Not string
   if (typeof imagePath !== 'string') {
@@ -50,7 +50,7 @@ export const findImage = async (
 /** */
 export const adaptOpenGraphImages = async (
   openGraph: OpenGraph = {},
-  astroSite: URL | undefined = new URL('')
+  astroSite: URL | undefined = new URL(''),
 ): Promise<OpenGraph> => {
   if (!openGraph?.images?.length) {
     return openGraph;
@@ -92,7 +92,7 @@ export const adaptOpenGraphImages = async (
       return {
         url: '',
       };
-    })
+    }),
   );
 
   return { ...openGraph, ...(adaptedImages ? { images: adaptedImages } : {}) };

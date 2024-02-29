@@ -1,7 +1,7 @@
 ---
 import Image from '~/components/common/Image.astro';
-import type { CallToAction } from '~/types';
 import Button from '~/components/ui/Button.astro';
+import type { CallToAction } from '~/types';
 
 export interface Props {
   title?: string;
@@ -49,16 +49,20 @@ const {
 
           {
             actions && (
-              <div class="max-w-xs sm:max-w-md m-auto flex flex-nowrap flex-col sm:flex-row sm:justify-center gap-4 lg:justify-start lg:m-0 lg:max-w-7xl">
-                {Array.isArray(actions) ? (
-                  actions.map((action) => (
+              <div
+                class="max-w-xs sm:max-w-md m-auto flex flex-nowrap flex-col sm:flex-row sm:justify-center gap-4 lg:justify-start lg:m-0 lg:max-w-7xl"
+              >
+                {
+                  Array.isArray(actions)
+                  ? (
+                    actions.map((action) => (
                     <div class="flex w-full sm:w-auto">
                       <Button {...(action || {})} class="w-full sm:mb-0" />
                     </div>
                   ))
-                ) : (
-                  <Fragment set:html={actions} />
-                )}
+                  )
+                  : <Fragment set:html={actions} />
+                }
               </div>
             )
           }
@@ -69,19 +73,19 @@ const {
         {
           image && (
             <div class="relative m-auto max-w-5xl">
-              {typeof image === 'string' ? (
-                <Fragment set:html={image} />
-              ) : (
-                <Image
-                  class="mx-auto rounded-md w-full"
-                  widths={[400, 768, 1024, 2040]}
-                  sizes="(max-width: 767px) 400px, (max-width: 1023px) 768px, (max-width: 2039px) 1024px, 2040px"
-                  loading="eager"
-                  width={600}
-                  height={600}
-                  {...image}
-                />
-              )}
+              {
+                typeof image === 'string' ? <Fragment set:html={image} /> : (
+                  <Image
+                    class="mx-auto rounded-md w-full"
+                    widths={[400, 768, 1024, 2040]}
+                    sizes="(max-width: 767px) 400px, (max-width: 1023px) 768px, (max-width: 2039px) 1024px, 2040px"
+                    loading="eager"
+                    width={600}
+                    height={600}
+                    {...image}
+                  />
+                )
+              }
             </div>
           )
         }

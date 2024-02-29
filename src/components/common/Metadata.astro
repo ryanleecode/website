@@ -1,11 +1,11 @@
 ---
-import merge from 'lodash.merge';
 import { AstroSeo } from '@astrolib/seo';
+import merge from 'lodash.merge';
 
 import type { Props as AstroSeoProps } from '@astrolib/seo';
 
-import { SITE, METADATA, I18N } from '~/utils/config';
 import type { MetaData } from '~/types';
+import { I18N, METADATA, SITE } from '~/utils/config';
 import { getCanonical } from '~/utils/permalinks';
 
 import { adaptOpenGraphImages } from '~/utils/images';
@@ -46,8 +46,12 @@ const seoProps: AstroSeoProps = merge(
   {
     title: METADATA?.title?.default,
     titleTemplate: METADATA?.title?.template,
-    noindex: typeof METADATA?.robots?.index !== 'undefined' ? !METADATA.robots.index : undefined,
-    nofollow: typeof METADATA?.robots?.follow !== 'undefined' ? !METADATA.robots.follow : undefined,
+    noindex: typeof METADATA?.robots?.index !== 'undefined'
+      ? !METADATA.robots.index
+      : undefined,
+    nofollow: typeof METADATA?.robots?.follow !== 'undefined'
+      ? !METADATA.robots.follow
+      : undefined,
     description: METADATA?.description,
     openGraph: METADATA?.openGraph,
     twitter: METADATA?.twitter,
@@ -57,12 +61,19 @@ const seoProps: AstroSeoProps = merge(
     titleTemplate: ignoreTitleTemplate ? '%s' : undefined,
     canonical: canonical,
     noindex: typeof robots?.index !== 'undefined' ? !robots.index : undefined,
-    nofollow: typeof robots?.follow !== 'undefined' ? !robots.follow : undefined,
+    nofollow: typeof robots?.follow !== 'undefined'
+      ? !robots.follow
+      : undefined,
     description: description,
     openGraph: { url: canonical, ...openGraph },
     twitter: twitter,
-  }
+  },
 );
 ---
 
-<AstroSeo {...{ ...seoProps, openGraph: await adaptOpenGraphImages(seoProps?.openGraph, Astro.site) }} />
+<AstroSeo
+  {...{
+    ...seoProps,
+    openGraph: await adaptOpenGraphImages(seoProps?.openGraph, Astro.site),
+  }}
+/>

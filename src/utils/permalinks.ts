@@ -1,6 +1,6 @@
 import slugify from 'limax';
 
-import { SITE, APP_BLOG } from '~/utils/config';
+import { APP_BLOG, SITE } from '~/utils/config';
 
 import { trim } from '~/utils/utils';
 
@@ -72,8 +72,8 @@ export const getBlogPermalink = (): string => getPermalink(BLOG_BASE);
 
 /** */
 export const getAsset = (path: string): string =>
-  '/' +
-  [BASE_PATHNAME, path]
+  '/'
+  + [BASE_PATHNAME, path]
     .map((el) => trimSlash(el))
     .filter((el) => !!el)
     .join('/');

@@ -17,12 +17,16 @@ import { UI } from '~/utils/config';
     }
   }
 
-  const initTheme = function () {
-    if ((defaultTheme && defaultTheme.endsWith(':only')) || (!localStorage.theme && defaultTheme !== 'system')) {
+  const initTheme = function() {
+    if (
+      (defaultTheme && defaultTheme.endsWith(':only'))
+      || (!localStorage.theme && defaultTheme !== 'system')
+    ) {
       applyTheme(defaultTheme.replace(':only', ''));
     } else if (
-      localStorage.theme === 'dark' ||
-      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      localStorage.theme === 'dark'
+      || (!('theme' in localStorage)
+        && window.matchMedia('(prefers-color-scheme: dark)').matches)
     ) {
       applyTheme('dark');
     } else {
@@ -32,7 +36,9 @@ import { UI } from '~/utils/config';
   initTheme();
 
   function attachEvent(selector, event, fn) {
-    const matches = typeof selector === 'string' ? document.querySelectorAll(selector) : selector;
+    const matches = typeof selector === 'string'
+      ? document.querySelectorAll(selector)
+      : selector;
     if (matches && matches.length) {
       matches.forEach((elem) => {
         elem.addEventListener(event, (e) => fn(e, elem), false);
@@ -40,39 +46,47 @@ import { UI } from '~/utils/config';
     }
   }
 
-  const onLoad = function () {
+  const onLoad = function() {
     let lastKnownScrollPosition = window.scrollY;
     let ticking = true;
 
-    attachEvent('#header nav', 'click', function () {
-      document.querySelector('[data-aw-toggle-menu]')?.classList.remove('expanded');
+    attachEvent('#header nav', 'click', function() {
+      document.querySelector('[data-aw-toggle-menu]')?.classList.remove(
+        'expanded',
+      );
       document.body.classList.remove('overflow-hidden');
       document.getElementById('header')?.classList.remove('h-screen');
       document.getElementById('header')?.classList.remove('expanded');
       document.getElementById('header')?.classList.remove('bg-page');
       document.querySelector('#header nav')?.classList.add('hidden');
-      document.querySelector('#header > div > div:last-child')?.classList.add('hidden');
+      document.querySelector('#header > div > div:last-child')?.classList.add(
+        'hidden',
+      );
     });
 
-    attachEvent('[data-aw-toggle-menu]', 'click', function (_, elem) {
+    attachEvent('[data-aw-toggle-menu]', 'click', function(_, elem) {
       elem.classList.toggle('expanded');
       document.body.classList.toggle('overflow-hidden');
       document.getElementById('header')?.classList.toggle('h-screen');
       document.getElementById('header')?.classList.toggle('expanded');
       document.getElementById('header')?.classList.toggle('bg-page');
       document.querySelector('#header nav')?.classList.toggle('hidden');
-      document.querySelector('#header > div > div:last-child')?.classList.toggle('hidden');
+      document.querySelector('#header > div > div:last-child')?.classList.toggle(
+        'hidden',
+      );
     });
 
-    attachEvent('[data-aw-toggle-color-scheme]', 'click', function () {
+    attachEvent('[data-aw-toggle-color-scheme]', 'click', function() {
       if (defaultTheme.endsWith(':only')) {
         return;
       }
       document.documentElement.classList.toggle('dark');
-      localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      localStorage.theme = document.documentElement.classList.contains('dark')
+        ? 'dark'
+        : 'light';
     });
 
-    attachEvent('[data-aw-social-share]', 'click', function (_, elem) {
+    attachEvent('[data-aw-social-share]', 'click', function(_, elem) {
       const network = elem.getAttribute('data-aw-social-share');
       const url = encodeURIComponent(elem.getAttribute('data-aw-url'));
       const text = encodeURIComponent(elem.getAttribute('data-aw-text'));
@@ -106,28 +120,34 @@ import { UI } from '~/utils/config';
     });
 
     let screenSize = window.matchMedia('(max-width: 767px)');
-    screenSize.addEventListener('change', function () {
-      document.querySelector('[data-aw-toggle-menu]')?.classList.remove('expanded');
+    screenSize.addEventListener('change', function() {
+      document.querySelector('[data-aw-toggle-menu]')?.classList.remove(
+        'expanded',
+      );
       document.body.classList.remove('overflow-hidden');
       document.getElementById('header')?.classList.remove('h-screen');
       document.getElementById('header')?.classList.remove('expanded');
       document.getElementById('header')?.classList.remove('bg-page');
       document.querySelector('#header nav')?.classList.add('hidden');
-      document.querySelector('#header > div > div:last-child')?.classList.add('hidden');
+      document.querySelector('#header > div > div:last-child')?.classList.add(
+        'hidden',
+      );
     });
 
     function appyHeaderStylesOnScroll() {
       const header = document.querySelector('#header[data-aw-sticky-header]');
       if (lastKnownScrollPosition > 60 && !header.classList.contains('scroll')) {
         document.getElementById('header').classList.add('scroll');
-      } else if (lastKnownScrollPosition <= 60 && header.classList.contains('scroll')) {
+      } else if (
+        lastKnownScrollPosition <= 60 && header.classList.contains('scroll')
+      ) {
         document.getElementById('header').classList.remove('scroll');
       }
       ticking = false;
     }
     appyHeaderStylesOnScroll();
 
-    attachEvent([document], 'scroll', function () {
+    attachEvent([document], 'scroll', function() {
       lastKnownScrollPosition = window.scrollY;
 
       if (!ticking) {
@@ -138,7 +158,7 @@ import { UI } from '~/utils/config';
       }
     });
   };
-  const onPageShow = function () {
+  const onPageShow = function() {
     document.documentElement.classList.add('motion-safe:scroll-smooth');
     const elem = document.querySelector('[data-aw-toggle-menu]');
     if (elem) {

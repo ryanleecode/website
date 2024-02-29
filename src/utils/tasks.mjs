@@ -20,9 +20,8 @@ const tasksIntegration = () => {
           const robotsTxtFile = new URL('robots.txt', publicDir);
           const robotsTxtFileInOut = new URL('robots.txt', outDir);
 
-          const hasIntegration =
-            Array.isArray(config?.integrations) &&
-            config.integrations?.find((e) => e?.name === '@astrojs/sitemap') !== undefined;
+          const hasIntegration = Array.isArray(config?.integrations)
+            && config.integrations?.find((e) => e?.name === '@astrojs/sitemap') !== undefined;
           const sitemapExists = fs.existsSync(sitemapFile);
 
           if (hasIntegration && sitemapExists) {
